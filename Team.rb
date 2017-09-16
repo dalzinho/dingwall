@@ -1,17 +1,17 @@
 class Team
 
 	attr_reader :name, :won, :drawn, :lost, :gfor, :gagainst, :score			
-	attr_accessor :score
+	
 
 
 	def initialize(name, won, drawn, lost, gfor, gagainst)
-@name = name
+		@name = name
 		@won = won
 		@drawn = drawn
 		@lost = lost
 		@gfor = gfor
 		@gagainst = gagainst
-		@max_possible
+		@score
 	end
 
 	def played()
@@ -40,14 +40,14 @@ class Team
 		return (points().to_f / played).round(2)
 	end
 
-	def possible()
+	def possible(max_possible)
 		subtractor = (3 * @lost) + (2 * @drawn)
 		
-		return @max_possible - subtractor
+		return max_possible - subtractor
 	end
 
 	def possible_vs_played()
-		return possible().to_f / played()
+		return possible(66).to_f / played()
 	end
 
 	def standardize(target, table_av, table_sd)
@@ -63,18 +63,38 @@ class Team
 	end
 
 	def std_poss(table_av, table_sd)
-					poss_value = possible() + possible_vs_played()
+		poss_value = possible(66) + possible_vs_played()
 		return standardize(poss_value, table_av, table_sd)
 	end
 	
-	def score(ppg_av, ppg_sd, gdpg_av, gdpg_sd, poss_av, poss_sd)
+	def set_score(ppg_av, ppg_sd, gdpg_av, gdpg_sd, poss_av, poss_sd)
 		ppg = stdppg(ppg_av, ppg_sd)
 		gdpg = std_gdpg(gdpg_av, gdpg_sd)
 		poss = std_poss(poss_av, poss_sd)
 		
 		multiplier = ((ppg) + (gdpg * 0.2) + (poss * 0.2)) / 3
 		
-		return 500 + (200 * multiplier)
+		@score =  500 + (200 * multiplier).round(0)
+	end
+
+	def hash_me()
+		hash = {
+			name: @name,
+			played: played(),
+			won: @won,
+			drawn: @drawn,
+			lost: @lost,
+			gfor: @gfor,
+			gagainst: @gagainst,
+			gdiff: goal_difference(),
+			points: points(),
+			ppg: ppg(),
+			gdpg: gdpg(),
+			poss: possible(66),
+			score: @score
+		}
+
+		return hash
 	end
 
 end
