@@ -1,47 +1,27 @@
-require './Table'
-require './Team'
-require './Scraper'
+require './HTML_Scraper'
+require './HTML_Parser'
+require './models/Team'
+require './models/Table'
 require 'json'
 
-class Main
+scraper = HTML_Scraper.new()
+parser = HTML_Parser.new(scraper)
+team_data = parser.get_table_data()
+teams = team_data.map { |team| Team.new(team)}
+table = Table.new(teams)
 
-	def initialize()
-
-		teams =  File.open("./scraped_data.json","r") do |f|
-			JSON.parse(f.read)
-		end
-
-		@table = Table.new(parse(teams))
-
-		@table.set_team_scores()
-
-
-		json_output()
-
-	end
-	
-	def parse(teams)
-		team_array = []
-
-		for team in teams
-			object = Team.new(team["name"], team["won"].to_i, team["drawn"].to_i, team["lost"].to_i, team["gfor"].to_i, team["gagainst"].to_i)
-			team_array.push(object)
-		end
-
-		return team_array
-	end
-
-	def json_output
-		
-		array = []
-
-		for team in @table.teams
-			array.push(team.hash_me())
-		end
-
-		return array
-	end
+for team in teams
+	team.set_standardized_total_points_per_game(table.league_average_ppg, table.league_sd_ppg)
+	team.set_standardized_total_goal_difference_per_game(table.league_average_gdpg, table.league_sd_gdpg)
+	team.set_standardized_total_possible(table.league_average_possible, table.league_sd_possible)
+	team.set_score()
 end
 
+output = {
+	update: parser.get_date_data,
+	teams: teams.map {|team| team.to_hash}
+}
 
-main = Main.new()
+f = File.open(output[:update].to_s + 'data', 'w')
+f.write(output.to_json)
+f.close
