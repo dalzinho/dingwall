@@ -15,6 +15,7 @@ class HTML_Parser
 			detail = {}
 
 			[
+				[:actual_league_position, 'td[1]/text()'],
 				[:name, 'td[2]/text()'],
 
 				[:home_wins, 'td[9]/text()'],
