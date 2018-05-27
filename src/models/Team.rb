@@ -1,22 +1,50 @@
-class Team
-
-	attr_reader :name, :won, :drawn, :lost, :gfor, :gagainst, :score			
+class Team	
 	
+	def initialize(parsed_object)
+		@name = parsed_object[:name]
+		
+		@home_wins = parsed_object[:home_wins]
+		@home_draws = parsed_object[:home_draws]
+		@home_losses = parsed_object[:home_losses]
+		@home_goals_for = parsed_object[:home_goals_for]
+		@home_goals_against = parsed_object[:home_goals_against]
 
+		@away_wins = parsed_object[:away_wins]
+		@away_draws = parsed_object[:away_draws]
+		@away_losses = parsed_object[:away_losses]
+		@away_goals_for = parsed_object[:away_goals_for]
+		@away_goals_against = parsed_object[:away_goals_against]
+		@away_points
 
-	def initialize(name, won, drawn, lost, gfor, gagainst)
-		@name = name
-		@won = won
-		@drawn = drawn
-		@lost = lost
-		@gfor = gfor
-		@gagainst = gagainst
+		@total_played
+
+		@total_wins
+		@total_draws
+		@total_losses
+		@total_goals_for
+		@total_goals_against
+		@total_goal_difference
+		@total_goal_difference_per_game
+		@total_points
+		@total_possible
+		@average_points_per_game
+		@average_points_per_game_times_total_league_fixtures
+
+		@standardized_total_possible
+		@standardized_total_goal_difference_per_game
+		@standardized_total_points_per_game
+
+		@actual_league_position = parsed_object[:actual_league_position]
+		
 		@score
+	end
+
+	def set_totals() 
+
 	end
 
 	def played()
 		return @won + @drawn + @lost
-
 	end
 
 	def points()

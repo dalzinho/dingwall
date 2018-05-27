@@ -13,12 +13,12 @@ class Table
 		@poss_sd = poss_sd()
 	end
 
-	def set_team_scores()
-		for team in @teams
-			puts team.name
-			team.set_score(@ppg_av, @ppg_sd, @gdpg_av, @gdpg_sd, @poss_av, @poss_sd)
-		end
+def set_team_scores()
+	for team in @teams
+		puts team.name
+		team.set_score(@ppg_av, @ppg_sd, @gdpg_av, @gdpg_sd, @poss_av, @poss_sd)
 	end
+end
 	
 	def max_score()
 		return ((@teams.size - 1)  * 2) * 3
