@@ -22,6 +22,6 @@ output = {
 	teams: teams.map {|team| team.to_hash}
 }
 
-f = File.open(output[:update].to_s + 'data', 'w')
+f = File.open('./data/' + output[:update].to_s + 'data', 'w')
 f.write(output.to_json)
 f.close
