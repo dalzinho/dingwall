@@ -1,7 +1,7 @@
-require './HTML_Scraper'
-require './HTML_Parser'
-require './models/Team'
-require './models/Table'
+require_relative 'HTML_Scraper'
+require_relative 'HTML_Parser'
+require_relative 'models/Team'
+require_relative 'models/Table'
 require 'json'
 
 scraper = HTML_Scraper.new()
@@ -22,6 +22,6 @@ output = {
 	teams: teams.map {|team| team.to_hash}
 }
 
-f = File.open('./data/' + output[:update].to_s + 'data', 'w')
-f.write(output.to_json)
+f = File.open(__dir__ + '/data/' + output[:update].to_s + 'data', 'w')
+	f.write(output.to_json)
 f.close
